@@ -1,6 +1,7 @@
 import { test, expect} from '@playwright/test'
-import { faker, tr } from '@faker-js/faker'
+import { faker } from '@faker-js/faker'
 import { UserModel } from './fixtures/user.model'
+import { UsersPage } from './pages/users'
 
 test.describe('teste basico', () => {
   test('registrar usuário', async ({page}) => {
@@ -154,7 +155,6 @@ test.describe('teste com modelagem de dados', () => {
     await page.click('xpath=//label[@for="input-agree"]')
     }
 
-    // await page.click('xpath=//label[@for="input-agree"]')
     await page.click('xpath=//input[@value="Continue"]')
 
     await expect(page).toHaveTitle('Your Account Has Been Created!')
@@ -170,6 +170,28 @@ test.describe('teste com modelagem de dados', () => {
 
     await expect(coninue_button).toBeVisible()
     await expect(coninue_button).toBeEnabled()
+  })
+})
+
+test.describe('teste com page object model', () => {
+  test.only('registrar usuário', async ({page}) => {
+    const user: UserModel = {
+      firstName: faker.person.firstName(),
+      lastName: faker.person.lastName(),
+      email: faker.internet.email(),
+      telephone: faker.phone.number({style: 'national'}),
+      password: '123456',
+      confirmPassword: '123456',
+      newsletter: true,
+      terms: true
+    }
+
+    const usersPage = new UsersPage(page)
+
+    await usersPage.visitURL()
+    await usersPage.register(user)
+
+    await usersPage.verifyRegistrationSuccess()
   })
 })
 
