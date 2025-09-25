@@ -174,7 +174,7 @@ test.describe('teste com modelagem de dados', () => {
 })
 
 test.describe('teste com page object model', () => {
-  test.only('registrar usuário', async ({page}) => {
+  test('registrar usuário', async ({page}) => {
     const user: UserModel = {
       firstName: faker.person.firstName(),
       lastName: faker.person.lastName(),
