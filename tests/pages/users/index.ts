@@ -1,11 +1,29 @@
-import { Page, expect } from '@playwright/test'
+import { Locator, Page, expect } from '@playwright/test'
 import { UserModel } from '../../fixtures/user.model'
 
 export class UsersPage {
   readonly page: Page
+  readonly fisrtNameInput: Locator
+  readonly lastNameInput: Locator
+  readonly emailInput: Locator
+  readonly telephoneInput: Locator
+  readonly passwordInput: Locator
+  readonly confirmPwd: Locator
+  readonly newsletterYes: Locator
+  readonly termsCheckbox: Locator
+  readonly continueButton: Locator
 
   constructor(page: Page) {
     this.page = page
+    this.fisrtNameInput = page.locator('#input-firstname')
+    this.lastNameInput = page.locator('#input-lastname')
+    this.emailInput = page.locator('#input-email')
+    this.telephoneInput = page.locator('#input-telephone')
+    this.passwordInput = page.locator('#input-password')
+    this.confirmPwd = page.locator('#input-confirm')
+    this.newsletterYes = page.locator('xpath=//label[@for="input-newsletter-yes"]')
+    this.termsCheckbox = page.locator('xpath=//label[@for="input-agree"]')
+    this.continueButton = page.locator('xpath=//input[@value="Continue"]')
   }
 
   async visitURL(){
@@ -13,25 +31,22 @@ export class UsersPage {
   }
 
   async register(user: UserModel) {
-    const inputFirstName = this.page.locator('#input-firstname')
-    await inputFirstName.fill('João')
-
-    await this.page.fill('id=input-firstname', user.firstName)
-    await this.page.fill('id=input-lastname', user.lastName)
-    await this.page.fill('id=input-email', user.email)
-    await this.page.fill('id=input-telephone', user.telephone)   
-    await this.page.fill('id=input-password', user.password)
-    await this.page.fill('id=input-confirm', user.confirmPassword)
+    await this.fisrtNameInput.fill(user.firstName)
+    await this.lastNameInput.fill(user.lastName)
+    await this.emailInput.fill(user.email)
+    await this.telephoneInput.fill(user.telephone)
+    await this.passwordInput.fill(user.password)
+    await this.confirmPwd.fill(user.confirmPassword)
 
     if (user.newsletter == true) {
-    await this.page.click('xpath=//label[@for="input-newsletter-yes"]')
+    await this.newsletterYes.click()
     }
 
     if(user.terms == true) {
-    await this.page.click('xpath=//label[@for="input-agree"]')
+    await this.termsCheckbox.click()
     }
 
-    await this.page.click('xpath=//input[@value="Continue"]')
+    await this.continueButton.click()
   }
 
   async verifyRegistrationSuccess(){
