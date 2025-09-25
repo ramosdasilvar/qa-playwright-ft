@@ -1,6 +1,9 @@
 import { Locator, Page, expect } from '@playwright/test'
 import { UserModel } from '../../fixtures/user.model'
 
+require('dotenv').config()
+const BASE_URL = process.env.BASE_URL
+
 export class UsersPage {
   readonly page: Page
   readonly fisrtNameInput: Locator
@@ -27,7 +30,10 @@ export class UsersPage {
   }
 
   async visitURL(){
-    await this.page.goto('https://ecommerce-playground.lambdatest.io/index.php?route=account/register')
+    if (!BASE_URL) {
+      throw new Error('BASE_URL não estpa definida no arquivo .env!')
+    }
+    await this.page.goto(BASE_URL)
   }
 
   async register(user: UserModel) {
