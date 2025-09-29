@@ -1,7 +1,8 @@
-import { Locator, Page, expect } from '@playwright/test'
+import { type Locator, type Page, expect } from '@playwright/test'
 import { UserModel } from '../../fixtures/user.model'
+import dotenv from 'dotenv'
 
-require('dotenv').config()
+dotenv.config()
 const BASE_URL = process.env.BASE_URL
 
 export class UsersPage {
